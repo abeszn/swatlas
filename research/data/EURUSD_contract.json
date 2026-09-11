@@ -1,0 +1,1 @@
+{"symbol":"EURUSD","digits":5,"point":0.00001,"contract_size":100000.0,"tick_size":0.00001,"tick_value":1.0,"volume_min":0.01,"volume_max":500.0,"volume_step":0.01,"stops_level":0,"tick_value_source":"order_calc_profit"}

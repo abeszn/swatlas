@@ -1,0 +1,677 @@
+{
+ "fetched_at": "2026-08-31T11:09:09.755909+00:00",
+ "events": [
+  {
+   "when": "2026-08-30T15:15:00+00:00",
+   "currency": "ALL",
+   "title": "G20 Meetings",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-30T23:50:00+00:00",
+   "currency": "JPY",
+   "title": "Prelim Industrial Production m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-30T23:50:00+00:00",
+   "currency": "JPY",
+   "title": "Retail Sales y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T01:00:00+00:00",
+   "currency": "AUD",
+   "title": "MI Inflation Gauge m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T01:00:00+00:00",
+   "currency": "NZD",
+   "title": "ANZ Business Confidence",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T01:30:00+00:00",
+   "currency": "AUD",
+   "title": "Company Operating Profits q/q",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T01:30:00+00:00",
+   "currency": "AUD",
+   "title": "Private Sector Credit m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T01:30:00+00:00",
+   "currency": "CNY",
+   "title": "Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T01:30:00+00:00",
+   "currency": "CNY",
+   "title": "Non-Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T05:00:00+00:00",
+   "currency": "JPY",
+   "title": "Housing Starts y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T06:29:00+00:00",
+   "currency": "EUR",
+   "title": "German Prelim CPI m/m",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-08-31T07:00:00+00:00",
+   "currency": "GBP",
+   "title": "Bank Holiday",
+   "impact": "holiday"
+  },
+  {
+   "when": "2026-08-31T15:15:00+00:00",
+   "currency": "ALL",
+   "title": "G20 Meetings",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T23:01:00+00:00",
+   "currency": "GBP",
+   "title": "BRC Shop Price Index y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-08-31T23:50:00+00:00",
+   "currency": "JPY",
+   "title": "Capital Spending q/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T00:30:00+00:00",
+   "currency": "JPY",
+   "title": "Final Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T01:30:00+00:00",
+   "currency": "AUD",
+   "title": "Building Approvals m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T01:30:00+00:00",
+   "currency": "AUD",
+   "title": "Current Account",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T01:45:00+00:00",
+   "currency": "CNY",
+   "title": "RatingDog Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T03:35:00+00:00",
+   "currency": "JPY",
+   "title": "10-y Bond Auction",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T05:00:00+00:00",
+   "currency": "JPY",
+   "title": "Consumer Confidence",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T06:00:00+00:00",
+   "currency": "EUR",
+   "title": "German Retail Sales m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T06:00:00+00:00",
+   "currency": "GBP",
+   "title": "Nationwide HPI m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T06:30:00+00:00",
+   "currency": "AUD",
+   "title": "Commodity Prices y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T06:30:00+00:00",
+   "currency": "CHF",
+   "title": "Retail Sales y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T07:15:00+00:00",
+   "currency": "EUR",
+   "title": "Spanish Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T07:30:00+00:00",
+   "currency": "CHF",
+   "title": "Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T07:45:00+00:00",
+   "currency": "EUR",
+   "title": "Italian Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T07:50:00+00:00",
+   "currency": "EUR",
+   "title": "French Final Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T07:55:00+00:00",
+   "currency": "EUR",
+   "title": "German Final Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T08:00:00+00:00",
+   "currency": "EUR",
+   "title": "Final Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T08:30:00+00:00",
+   "currency": "EUR",
+   "title": "Italian Monthly Unemployment Rate",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T08:30:00+00:00",
+   "currency": "GBP",
+   "title": "Final Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T08:30:00+00:00",
+   "currency": "GBP",
+   "title": "M4 Money Supply m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T08:30:00+00:00",
+   "currency": "GBP",
+   "title": "Mortgage Approvals",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T08:30:00+00:00",
+   "currency": "GBP",
+   "title": "Net Lending to Individuals m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T09:00:00+00:00",
+   "currency": "EUR",
+   "title": "Core CPI Flash Estimate y/y",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-01T09:00:00+00:00",
+   "currency": "EUR",
+   "title": "CPI Flash Estimate y/y",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-01T09:00:00+00:00",
+   "currency": "EUR",
+   "title": "Italian Prelim CPI m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T09:00:00+00:00",
+   "currency": "EUR",
+   "title": "Unemployment Rate",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T13:05:00+00:00",
+   "currency": "USD",
+   "title": "FOMC Member Barr Speaks",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T13:30:00+00:00",
+   "currency": "CAD",
+   "title": "Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T13:45:00+00:00",
+   "currency": "USD",
+   "title": "Final Manufacturing PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T14:00:00+00:00",
+   "currency": "USD",
+   "title": "ISM Manufacturing PMI",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-01T14:00:00+00:00",
+   "currency": "USD",
+   "title": "ISM Manufacturing Prices",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-01T14:00:00+00:00",
+   "currency": "USD",
+   "title": "JOLTS Job Openings",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-01T14:00:00+00:00",
+   "currency": "USD",
+   "title": "Construction Spending m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T14:10:00+00:00",
+   "currency": "USD",
+   "title": "RCM/TIPP Economic Optimism",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T14:15:00+00:00",
+   "currency": "USD",
+   "title": "Omdia Total Vehicle Sales",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T14:50:00+00:00",
+   "currency": "NZD",
+   "title": "GDT Price Index",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T15:15:00+00:00",
+   "currency": "ALL",
+   "title": "G20 Meetings",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T20:30:00+00:00",
+   "currency": "USD",
+   "title": "API Weekly Statistical Bulletin",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T22:45:00+00:00",
+   "currency": "NZD",
+   "title": "Building Consents m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-01T23:50:00+00:00",
+   "currency": "JPY",
+   "title": "Monetary Base y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-02T00:30:00+00:00",
+   "currency": "EUR",
+   "title": "German Buba President Nagel Speaks",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-02T01:30:00+00:00",
+   "currency": "AUD",
+   "title": "GDP q/q",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T02:00:00+00:00",
+   "currency": "NZD",
+   "title": "Official Cash Rate",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T02:00:00+00:00",
+   "currency": "NZD",
+   "title": "RBNZ Monetary Policy Statement",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T02:00:00+00:00",
+   "currency": "NZD",
+   "title": "RBNZ Rate Statement",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T03:00:00+00:00",
+   "currency": "NZD",
+   "title": "RBNZ Press Conference",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T06:45:00+00:00",
+   "currency": "EUR",
+   "title": "French Gov Budget Balance",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-02T07:00:00+00:00",
+   "currency": "EUR",
+   "title": "Spanish Unemployment Change",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-02T12:15:00+00:00",
+   "currency": "USD",
+   "title": "ADP Non-Farm Employment Change",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-02T13:45:00+00:00",
+   "currency": "CAD",
+   "title": "BOC Rate Statement",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T13:45:00+00:00",
+   "currency": "CAD",
+   "title": "Overnight Rate",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T14:00:00+00:00",
+   "currency": "USD",
+   "title": "Factory Orders m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-02T14:30:00+00:00",
+   "currency": "CAD",
+   "title": "BOC Press Conference",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-02T14:30:00+00:00",
+   "currency": "USD",
+   "title": "Crude Oil Inventories",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-02T18:00:00+00:00",
+   "currency": "USD",
+   "title": "Beige Book",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-02T22:45:00+00:00",
+   "currency": "NZD",
+   "title": "Overseas Trade Index q/q",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T01:00:00+00:00",
+   "currency": "NZD",
+   "title": "ANZ Commodity Prices m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T01:15:00+00:00",
+   "currency": "AUD",
+   "title": "RBA Assist Gov Jones Speaks",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T01:30:00+00:00",
+   "currency": "AUD",
+   "title": "Goods Trade Balance",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T01:45:00+00:00",
+   "currency": "CNY",
+   "title": "RatingDog Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T03:35:00+00:00",
+   "currency": "JPY",
+   "title": "30-y Bond Auction",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T05:15:00+00:00",
+   "currency": "AUD",
+   "title": "RBA Assist Gov Hunter Speaks",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T06:30:00+00:00",
+   "currency": "CHF",
+   "title": "CPI m/m",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-03T07:00:00+00:00",
+   "currency": "CHF",
+   "title": "GDP q/q",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T07:15:00+00:00",
+   "currency": "EUR",
+   "title": "Spanish Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T07:45:00+00:00",
+   "currency": "EUR",
+   "title": "Italian Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T07:50:00+00:00",
+   "currency": "EUR",
+   "title": "French Final Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T07:55:00+00:00",
+   "currency": "EUR",
+   "title": "German Final Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T08:00:00+00:00",
+   "currency": "EUR",
+   "title": "Final Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T08:30:00+00:00",
+   "currency": "GBP",
+   "title": "Final Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T09:00:00+00:00",
+   "currency": "EUR",
+   "title": "PPI m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T09:03:00+00:00",
+   "currency": "EUR",
+   "title": "Spanish 10-y Bond Auction",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T09:18:00+00:00",
+   "currency": "EUR",
+   "title": "French 10-y Bond Auction",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T09:30:00+00:00",
+   "currency": "USD",
+   "title": "Challenger Job Cuts y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T12:30:00+00:00",
+   "currency": "CAD",
+   "title": "Labor Productivity q/q",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T12:30:00+00:00",
+   "currency": "CAD",
+   "title": "Trade Balance",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T12:30:00+00:00",
+   "currency": "USD",
+   "title": "Unemployment Claims",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-03T12:30:00+00:00",
+   "currency": "USD",
+   "title": "FOMC Member Waller Speaks",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T12:30:00+00:00",
+   "currency": "USD",
+   "title": "Revised Nonfarm Productivity q/q",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T12:30:00+00:00",
+   "currency": "USD",
+   "title": "Revised Unit Labor Costs q/q",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T12:30:00+00:00",
+   "currency": "USD",
+   "title": "Trade Balance",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T13:45:00+00:00",
+   "currency": "USD",
+   "title": "Final Services PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T14:00:00+00:00",
+   "currency": "USD",
+   "title": "ISM Services PMI",
+   "impact": "medium"
+  },
+  {
+   "when": "2026-09-03T14:30:00+00:00",
+   "currency": "USD",
+   "title": "Natural Gas Storage",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T19:00:00+00:00",
+   "currency": "USD",
+   "title": "FOMC Member Hammack Speaks",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T19:05:00+00:00",
+   "currency": "USD",
+   "title": "FOMC Member Goolsbee Speaks",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-03T23:30:00+00:00",
+   "currency": "JPY",
+   "title": "Household Spending y/y",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-04T06:00:00+00:00",
+   "currency": "EUR",
+   "title": "German Factory Orders m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-04T08:00:00+00:00",
+   "currency": "EUR",
+   "title": "Italian Retail Sales m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-04T08:30:00+00:00",
+   "currency": "GBP",
+   "title": "Construction PMI",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-04T08:50:00+00:00",
+   "currency": "GBP",
+   "title": "BOE Gov Bailey Speaks",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-04T09:00:00+00:00",
+   "currency": "EUR",
+   "title": "Retail Sales m/m",
+   "impact": "low"
+  },
+  {
+   "when": "2026-09-04T12:30:00+00:00",
+   "currency": "CAD",
+   "title": "Employment Change",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-04T12:30:00+00:00",
+   "currency": "CAD",
+   "title": "Unemployment Rate",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-04T12:30:00+00:00",
+   "currency": "USD",
+   "title": "Average Hourly Earnings m/m",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-04T12:30:00+00:00",
+   "currency": "USD",
+   "title": "Non-Farm Employment Change",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-04T12:30:00+00:00",
+   "currency": "USD",
+   "title": "Unemployment Rate",
+   "impact": "high"
+  },
+  {
+   "when": "2026-09-04T14:00:00+00:00",
+   "currency": "CAD",
+   "title": "Ivey PMI",
+   "impact": "medium"
+  }
+ ]
+}

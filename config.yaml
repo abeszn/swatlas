@@ -1,0 +1,86 @@
+# Swatlas trading bot configuration.
+# Every value here is read at startup; nothing is hardcoded in the strategy code.
+
+# ---------------------------------------------------------------------------
+# WHY THIS CONFIGURATION
+#
+# Across 7 symbol/timeframe combinations at realistic costs, NO strategy tested
+# was profitable. Donchian was the least-bad and the only one that beat random
+# entries on gold in both the in-sample and out-of-sample periods. On FX majors
+# it did not beat random at all.
+#
+# XAUUSD H4 is the only setup with any supporting evidence (out-of-sample
+# expectancy +0.004 R - break-even, not profitable). It needs roughly $17,000
+# to size a 0.5% risk trade at the broker's minimum lot, so on a $1,000 account
+# the bot will correctly refuse every signal.
+#
+# dry_run is TRUE. Turn it off only after opening a larger demo account, and
+# only understanding that break-even is the honest expectation.
+#
+# Alternative if you want to stay on a small balance: USDJPY H1, which came out
+# at -0.001 R against random entries at -0.103 R. Still not profitable.
+# See research/RESEARCH.md for the full record.
+# ---------------------------------------------------------------------------
+
+symbol: XAUUSD
+timeframe: H4           # M1 M5 M15 M30 H1 H4 D1
+magic: 770001           # identifies this bot's trades; leave unique per bot instance
+
+strategy:
+  # ma_cross | donchian | smc   (see src/swatlas/strategy.py for what the
+  # research found about each - none has a demonstrated edge after costs)
+  name: donchian
+
+  # --- ma_cross (unused while name is donchian) ---
+  fast_period: 20
+  slow_period: 50
+  # Require the close to clear the slow MA by this many ATRs before acting.
+  # Filters out the chop that kills naive crossover systems. 0 disables it.
+  entry_buffer_atr: 0.10
+
+  # Extra arguments for the chosen strategy. Examples:
+  #   donchian:  {entry: 20, exit_n: 10}
+  #   smc:       {swing: 3, min_fvg_atr: 0.25, require_equilibrium: false}
+  # Equilibrium is off by default on purpose: requiring a discount/premium
+  # retracement made results WORSE than random in testing, because after a
+  # break of structure a move deep enough to reach discount usually means the
+  # trend has already failed. Turn it on only if your own data disagrees.
+  # Mid-plateau parameters, chosen from in-sample data and never retuned.
+  params: {entry: 20, exit_n: 10}
+
+  min_history: 200            # extra warm-up bars; SMC needs prior structure
+
+risk:
+  risk_per_trade_pct: 0.5   # percent of account balance risked per trade
+  atr_period: 14
+  # Donchian is a trend system: a fixed target caps exactly the winners it
+  # depends on. The validated design uses a 3xATR stop and no fixed target.
+  stop_loss_atr_mult: 3.0
+  take_profit_atr_mult: 6.0   # far enough out to rarely bind; the trend exit leads
+  max_open_positions: 1
+  max_daily_loss_pct: 3.0     # bot halts for the day past this realised loss
+  min_lot: 0.10               # floor: trade at least this, even if risk maths says less
+  max_lot: 0.50               # hard ceiling regardless of what sizing computes
+  # NOTE: with min_lot set, a trade whose risk-based size falls below 0.10 lots
+  # is sized UP to 0.10 instead of being skipped. On XAUUSD H4 that means most
+  # signals will now trade, but each floored trade risks MORE than
+  # risk_per_trade_pct (0.5%) - the bot logs the real % it risks each time.
+  # This is a deliberate step up in risk. Keep dry_run: true until you have
+  # watched the logged risk figures on a demo account and are comfortable.
+
+news:
+  # Blocks NEW entries around high-impact releases for the symbol's currencies.
+  # This is a cost control, not an alpha source: it avoids spread blowout,
+  # slippage and gap-through-stop. Existing positions are left alone - their
+  # stops are already on the broker's server.
+  enabled: true
+  min_impact: high            # high | medium | low
+  before_minutes: 30          # liquidity thins ahead of a release
+  after_minutes: 45           # and price whipsaws after it, usually for longer
+  max_cache_age_hours: 12     # the feed is rate-limited; do not hammer it
+
+execution:
+  dry_run: true               # true = log intended orders, send nothing
+  allow_live_account: false   # refuses to run on a real-money account while false
+  poll_seconds: 5
+  deviation_points: 20        # max slippage tolerated, in points

@@ -1,0 +1,97 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "1. Check connection",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/check_connection.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "2. Dashboard (http://127.0.0.1:8760)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_dashboard.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "3. Bot - DRY RUN (sends nothing)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_bot.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "4. Bot - EXECUTE (places real demo orders)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/run_bot.py",
+      "args": ["--execute"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "5. Self-test (offline, no terminal needed)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/selftest.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "6. Test trade - dry run",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/place_test_trade.py",
+      "args": ["--side", "buy"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "7. Close bot positions",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/place_test_trade.py",
+      "args": ["--close", "--confirm"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "R1. Research - fetch data",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/research/fetch_data.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "R2. Research - characterize",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/research/characterize.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "R3. Research - screen (H4)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/research/screen.py",
+      "args": ["H4"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "R4. Research - validate out-of-sample",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/research/validate.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

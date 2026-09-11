@@ -1,0 +1,12 @@
+MetaTrader5>=5.0.6090
+pandas>=2.2
+numpy>=1.26
+PyYAML>=6.0
+python-dotenv>=1.0
+
+# research
+pyarrow>=15.0
+
+# dashboard
+fastapi>=0.110
+uvicorn[standard]>=0.29

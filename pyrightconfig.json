@@ -1,0 +1,10 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": ["src", "research", "scripts"],
+  "stubPath": "typings",
+  "typeCheckingMode": "basic",
+  "include": ["src", "scripts", "research"],
+  "exclude": ["**/__pycache__", ".venv", "research/data", "logs"],
+  "reportMissingModuleSource": "none"
+}

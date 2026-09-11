@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swatlas</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c2430; --line:#2a3441;
+    --text:#e6edf3; --muted:#8b97a6; --accent:#4c8dff;
+    --up:#3fb950; --down:#f85149; --warn:#d29922;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f6f8fa; --panel:#fff; --panel2:#f0f3f6; --line:#d8dee4;
+           --text:#1f2328; --muted:#636c76; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+  header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+         padding:14px 20px;border-bottom:1px solid var(--line);background:var(--panel)}
+  h1{font-size:16px;margin:0;letter-spacing:.5px;font-weight:650}
+  .sub{color:var(--muted);font-size:12px}
+  .spacer{flex:1}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.6px;padding:3px 9px;
+         border-radius:999px;border:1px solid var(--line);background:var(--panel2)}
+  .badge.demo{color:var(--up);border-color:color-mix(in srgb,var(--up) 45%,transparent)}
+  .badge.real{color:var(--down);border-color:color-mix(in srgb,var(--down) 45%,transparent)}
+  .badge.warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;
+       background:var(--muted)}
+  .dot.on{background:var(--up);box-shadow:0 0 8px var(--up)}
+  .dot.off{background:var(--down)}
+  main{padding:18px 20px;max-width:1400px;margin:0 auto;display:grid;gap:16px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .card .label{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+  .card .value{font-family:var(--mono);font-size:21px;font-weight:600;margin-top:5px}
+  .card .note{font-size:11px;color:var(--muted);margin-top:2px}
+  .pos{color:var(--up)} .neg{color:var(--down)} .mut{color:var(--muted)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .panel h2{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);
+            margin:0;padding:12px 15px;border-bottom:1px solid var(--line);
+            display:flex;align-items:center;gap:10px}
+  .panel .body{padding:13px 15px}
+  .grid2{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
+  @media (max-width:980px){.grid2{grid-template-columns:1fr}}
+  canvas{width:100%;height:340px;display:block}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.6px;
+     color:var(--muted);font-weight:600;padding:8px 15px;border-bottom:1px solid var(--line)}
+  td{padding:9px 15px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12.5px}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--panel2)}
+  .empty{padding:26px 15px;text-align:center;color:var(--muted);font-size:13px}
+  button{font:inherit;font-size:12px;padding:4px 11px;border-radius:6px;cursor:pointer;
+         border:1px solid var(--line);background:var(--panel2);color:var(--text)}
+  button:hover{border-color:var(--down);color:var(--down)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  button.danger{background:var(--down);border-color:var(--down);color:#fff;font-weight:600}
+  button.danger:hover{color:#fff;opacity:.9}
+  .notice{margin:0;padding:9px 15px;font-size:12.5px;border-bottom:1px solid var(--line)}
+  .notice.ok{background:color-mix(in srgb,var(--up) 13%,transparent);color:var(--text)}
+  .notice.err{background:color-mix(in srgb,var(--down) 13%,transparent);color:var(--text)}
+  .panel h2 .spacer{flex:1}
+  .ctl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);
+       text-transform:none;letter-spacing:0;font-weight:400}
+  .ctl input[type=number]{width:58px;background:var(--panel2);color:var(--text);
+       border:1px solid var(--line);border-radius:5px;padding:3px 6px;
+       font-family:var(--mono);font-size:12px}
+  .ctl input[type=checkbox]{accent-color:var(--down)}
+  select{background:var(--panel2);color:var(--text);border:1px solid var(--line);
+         border-radius:5px;padding:3px 6px;font:inherit;font-size:11.5px;
+         font-family:var(--mono);text-transform:none;letter-spacing:0}
+  .tfbar{display:inline-flex;border:1px solid var(--line);border-radius:6px;
+         overflow:hidden}
+  .tfbar button{border:none;border-radius:0;background:transparent;padding:3px 9px;
+         font-family:var(--mono);font-size:11px;border-right:1px solid var(--line)}
+  .tfbar button:last-child{border-right:none}
+  .tfbar button:hover{color:var(--accent);border-color:var(--line)}
+  .tfbar button.on{background:var(--accent);color:#fff;font-weight:700}
+  .prop{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+        padding:12px 15px;border-bottom:1px solid var(--line)}
+  .prop:last-child{border-bottom:none}
+  .prop .head{font-family:var(--mono);font-size:14px;font-weight:600}
+  .prop .detail{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:3px}
+  .rejects{padding:10px 15px;border-top:1px solid var(--line);font-size:11.5px;
+           color:var(--muted);font-family:var(--mono)}
+  .rejects div{padding:2px 0}
+  .summary{padding:11px 15px;border-top:1px solid var(--line);font-size:12px;
+           font-family:var(--mono);background:var(--panel2)}
+  .pill{font-size:10px;padding:2px 7px;border-radius:999px;border:1px solid var(--line);
+        margin-left:7px;letter-spacing:.4px;font-weight:700}
+  .pill.live{background:var(--down);border-color:var(--down);color:#fff}
+  .pill.sim{color:var(--muted)}
+  .modebar{padding:8px 15px;font-size:12px;font-weight:600;letter-spacing:.3px;
+           border-bottom:1px solid var(--line)}
+  .modebar.live{background:color-mix(in srgb,var(--down) 16%,transparent);
+                color:var(--down)}
+  .modebar.sim{background:var(--panel2);color:var(--muted);font-weight:400}
+  .sig{font-family:var(--mono);font-size:26px;font-weight:700;letter-spacing:1px}
+  .kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line)}
+  .kv:last-child{border-bottom:none}
+  .kv span:first-child{color:var(--muted);font-size:12px}
+  .kv span:last-child{font-family:var(--mono);font-size:12.5px}
+  .alert{padding:10px 14px;border-radius:8px;font-size:12.5px;
+         background:color-mix(in srgb,var(--warn) 14%,transparent);
+         border:1px solid color-mix(in srgb,var(--warn) 40%,transparent)}
+  .alert.err{background:color-mix(in srgb,var(--down) 14%,transparent);
+             border-color:color-mix(in srgb,var(--down) 40%,transparent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>SWATLAS</h1>
+  <span class="sub" id="symline">—</span>
+  <span class="spacer"></span>
+  <span class="sub"><span class="dot" id="conndot"></span><span id="connlabel">connecting</span></span>
+  <span class="badge" id="modebadge">—</span>
+  <span class="badge" id="algobadge">—</span>
+  <span class="sub" id="clock">—</span>
+</header>
+
+<main>
+  <div id="alerts"></div>
+
+  <div class="cards">
+    <div class="card"><div class="label">Balance</div>
+      <div class="value" id="balance">—</div><div class="note" id="acctnote">—</div></div>
+    <div class="card"><div class="label">Equity</div>
+      <div class="value" id="equity">—</div><div class="note" id="equitynote">—</div></div>
+    <div class="card"><div class="label">Open P&amp;L</div>
+      <div class="value" id="openpnl">—</div><div class="note" id="poscount">—</div></div>
+    <div class="card"><div class="label">Realised (30d)</div>
+      <div class="value" id="realised">—</div><div class="note" id="realisednote">—</div></div>
+    <div class="card"><div class="label">Free margin</div>
+      <div class="value" id="freemargin">—</div><div class="note" id="marginnote">—</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Price
+        <span class="spacer"></span>
+        <select id="symbolSel" onchange="onViewChange()"></select>
+        <button id="symToggle" onclick="toggleSymbolList(this)">all</button>
+        <span id="tfBar" class="tfbar"></span>
+        <select id="tzSel" onchange="onTzChange()">
+          <option value="UTC" selected>UTC</option>
+          <option value="local">Local</option>
+          <option value="Europe/London">London</option>
+          <option value="America/New_York">New York</option>
+          <option value="Asia/Tokyo">Tokyo</option>
+          <option value="Australia/Sydney">Sydney</option>
+          <option value="Asia/Dubai">Dubai</option>
+        </select>
+      </h2>
+      <div class="mut" id="chartlabel" style="padding:6px 15px 0;font-size:11px"></div>
+      <canvas id="chart"></canvas>
+    </div>
+
+    <div class="panel">
+      <h2>Strategy</h2>
+      <div class="body">
+        <div style="text-align:center;padding:8px 0 16px">
+          <div class="sig" id="signal">—</div>
+          <div class="sub" id="signalnote">desired position on the last closed bar</div>
+        </div>
+        <div class="kv"><span>Bid / Ask</span><span id="quote">—</span></div>
+        <div class="kv"><span>Spread</span><span id="spread">—</span></div>
+        <div class="kv"><span>ATR</span><span id="atr">—</span></div>
+        <div class="kv"><span>Last closed bar</span><span id="lastbar">—</span></div>
+        <div class="kv"><span>Risk / trade</span><span id="riskpct">—</span></div>
+        <div class="kv"><span>Magic</span><span id="magic">—</span></div>
+        <div class="kv"><span>Tick value</span><span id="tickvalue">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Trade proposals
+      <span class="spacer"></span>
+      <label class="ctl" title="Size by risk % (with a lot band) or trade a fixed lot">
+        sizing
+        <select id="sizeMode" onchange="renderSizeMode()">
+          <option value="risk">by risk %</option>
+          <option value="fixed">fixed lots</option>
+        </select>
+      </label>
+      <label class="ctl" id="riskCtl">risk %
+        <input id="riskPct" type="number" step="0.1" min="0.1" max="5" value="0.5">
+      </label>
+      <label class="ctl" id="minLotCtl" title="Floor: size up to at least this many lots">min lot
+        <input id="minLot" type="number" step="0.01" min="0" value="0.10">
+      </label>
+      <label class="ctl" id="maxLotCtl" title="Ceiling: never trade more than this many lots">max lot
+        <input id="maxLot" type="number" step="0.01" min="0.01" value="0.50">
+      </label>
+      <label class="ctl" id="fixedLotCtl" style="display:none"
+             title="Trade this exact lot on every setup, ignoring risk %">lots
+        <input id="fixedLot" type="number" step="0.01" min="0.01" value="0.10">
+      </label>
+      <label class="ctl" id="riskBudgetCtl"
+             title="Portfolio-wide cap on correlation-adjusted risk. This is the gate that actually rejects most proposals - min_lot flooring routinely sizes a single trade above the default 2%">risk budget %
+        <input id="riskBudget" type="number" step="0.5" min="0.5" max="100" value="2">
+      </label>
+      <label class="ctl" id="currencyCapCtl"
+             title="Cap on net exposure to any one currency. A single floored FX trade often exceeds the default 1% on its own, since every pair nets two currencies">currency cap %
+        <input id="currencyCap" type="number" step="0.5" min="0.5" max="100" value="1">
+      </label>
+      <label class="ctl">max corr
+        <input id="maxCorr" type="number" step="0.05" min="0.1" max="1" value="0.6">
+      </label>
+      <label class="ctl" title="Untick to simulate instead of trading">
+        <input id="liveMode" type="checkbox" checked onchange="renderMode()">
+        <span id="liveLabel">send real orders</span>
+      </label>
+      <button id="scanBtn" onclick="runScan(this)">Scan</button>
+      <button id="runBtn" class="danger" onclick="findAndRun(this)"
+              title="Scan and immediately place every surviving setup — no per-trade approval">Find &amp; Run</button>
+    </h2>
+    <div id="modeBar" class="modebar"></div>
+    <div id="scanNotice" class="notice" style="display:none"></div>
+    <div id="proposals"><div class="empty">Press Scan to look for setups.</div></div>
+  </div>
+
+  <div class="panel">
+    <h2>Open positions
+      <span class="spacer"></span>
+      <button id="closeall" style="display:none" onclick="closeAll(this)">Close all</button>
+    </h2>
+    <div id="notice" class="notice" style="display:none"></div>
+    <div id="positions"><div class="empty">—</div></div>
+  </div>
+
+  <div class="panel">
+    <h2>Closed trades (30 days)</h2>
+    <div id="deals"><div class="empty">—</div></div>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = (n, d=2) => n==null ? "—" : Number(n).toLocaleString(undefined,
+  {minimumFractionDigits:d, maximumFractionDigits:d});
+const signed = (n, d=2) => n==null ? "—" : (n>=0?"+":"") + fmt(n,d);
+const cls = n => n==null ? "" : n>0 ? "pos" : n<0 ? "neg" : "mut";
+
+let currency = "USD", digits = 5, alerts = [], riskSeeded = false;
+
+// What the chart / strategy panel is looking at. Null means "whatever
+// config.yaml says", which is what the bot itself trades.
+const view = {symbol: null, timeframe: null};
+
+function tzName(){
+  const v = $("tzSel").value;
+  return v === "local" ? undefined : v;   // undefined = browser local zone
+}
+function tzLabel(){
+  const v = $("tzSel").value;
+  if(v === "UTC") return "UTC";
+  if(v === "local") return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return v.split("/").pop().replace("_"," ");
+}
+function fmtTime(iso, withDate){
+  if(!iso) return "—";
+  const opts = {hour:"2-digit", minute:"2-digit", hour12:false, timeZone: tzName()};
+  if(withDate){ opts.day = "2-digit"; opts.month = "short"; }
+  try { return new Intl.DateTimeFormat("en-GB", opts).format(new Date(iso)); }
+  catch { return String(iso).replace("T"," ").slice(0,16); }
+}
+
+function viewQuery(extra){
+  const q = new URLSearchParams(extra || {});
+  if(view.symbol) q.set("symbol", view.symbol);
+  if(view.timeframe) q.set("timeframe", view.timeframe);
+  return q.toString();
+}
+
+let showingAllSymbols = false;
+
+async function loadSymbols(){
+  let d;
+  try{ d = await getJSON("/api/symbols?all=" + showingAllSymbols); }catch{ return; }
+  if(!view.symbol){
+    // config.yaml's symbol may not exist on whichever account is logged in
+    // right now - fall back to whatever this broker actually offers instead
+    // of leaving the chart permanently broken.
+    const names = new Set(d.symbols.map(s => s.name));
+    view.symbol = names.has(d.configured) ? d.configured
+                : (d.symbols[0] ? d.symbols[0].name : d.configured);
+  }
+  view.timeframe = view.timeframe || d.configured_timeframe;
+  $("symToggle").textContent = showingAllSymbols
+    ? `Market Watch only` : `all ${d.total_available}`;
+  $("symToggle").title = showingAllSymbols
+    ? "Show only Market Watch symbols"
+    : `Show all ${d.total_available} broker symbols`;
+
+  // Group the picker so a broker with hundreds of symbols stays navigable.
+  const groups = {};
+  for(const s of d.symbols) (groups[s.group] ||= []).push(s);
+  const sel = $("symbolSel");
+  sel.innerHTML = Object.keys(groups).sort().map(g =>
+    `<optgroup label="${g}">` + groups[g].map(s =>
+      `<option value="${s.name}"${s.name===view.symbol?" selected":""}>${s.name}</option>`
+    ).join("") + `</optgroup>`).join("");
+
+  $("tfBar").innerHTML = d.timeframes.map(t =>
+    `<button class="${t===view.timeframe?"on":""}" onclick="setTimeframe('${t}')">${t}</button>`
+  ).join("");
+}
+
+async function toggleSymbolList(btn){
+  showingAllSymbols = !showingAllSymbols;
+  btn.disabled = true;
+  try{ await loadSymbols(); } finally { btn.disabled = false; }
+}
+
+function setTimeframe(tf){
+  view.timeframe = tf;
+  [...document.querySelectorAll("#tfBar button")].forEach(b =>
+    b.classList.toggle("on", b.textContent.trim() === tf));
+  onViewChange();
+}
+
+function onViewChange(){
+  view.symbol = $("symbolSel").value || view.symbol;
+  refreshState(); refreshChart();
+}
+
+function onTzChange(){
+  refreshState(); refreshDeals(); refreshChart();
+}
+
+async function getJSON(url, opts){
+  const r = await fetch(url, opts);
+  if(!r.ok){
+    const body = await r.json().catch(()=>({}));
+    // FastAPI validation errors put a LIST of objects in `detail`; rendering it
+    // straight gives the useless "[object Object]".
+    let detail = body.detail ?? body.comment ?? r.statusText;
+    if(Array.isArray(detail))
+      detail = detail.map(d => `${(d.loc||[]).join(".")}: ${d.msg}`).join("; ");
+    else if(detail && typeof detail === "object")
+      detail = JSON.stringify(detail);
+    throw new Error(String(detail));
+  }
+  return r.json();
+}
+
+function renderAlerts(){
+  $("alerts").innerHTML = alerts.map(a =>
+    `<div class="alert ${a.kind==='err'?'err':''}">${a.text}</div>`).join("");
+}
+
+async function refreshState(){
+  let s;
+  try{
+    s = await getJSON("/api/state?" + viewQuery());
+  }catch(e){
+    $("conndot").className = "dot off";
+    $("connlabel").textContent = "disconnected";
+    alerts = [{kind:"err", text:"Cannot reach the MT5 terminal: " + e.message +
+      " — is the terminal running?"}];
+    renderAlerts();
+    return;
+  }
+
+  currency = s.account.currency; digits = s.symbol.digits;
+  $("conndot").className = "dot " + (s.terminal.connected ? "on" : "off");
+  $("connlabel").textContent = s.terminal.connected ? "connected" : "no broker link";
+  const bot = `bot trades ${s.symbol.configured} ${s.symbol.configured_timeframe}`;
+  $("symline").textContent = `${bot} · build ${s.terminal.build ?? "?"}`;
+  $("clock").textContent = fmtTime(s.server_time) + " " + tzLabel();
+
+  const mb = $("modebadge");
+  mb.textContent = s.account.mode;
+  mb.className = "badge " + (s.account.mode === "REAL" ? "real" : "demo");
+  const ab = $("algobadge");
+  ab.textContent = s.terminal.algo_trading ? "ALGO ON" : "ALGO OFF";
+  ab.className = "badge " + (s.terminal.algo_trading ? "demo" : "warn");
+
+  alerts = [];
+  if(s.account.mode === "REAL")
+    alerts.push({kind:"err", text:"<b>REAL-money account.</b> Every order here moves real funds."});
+  if(!s.terminal.algo_trading)
+    alerts.push({kind:"warn", text:"Algo Trading is disabled in the terminal — the bot cannot place orders."});
+  if(s.symbol.available === false)
+    alerts.push({kind:"warn", text:s.symbol.error +
+      " Pick a different symbol above, or point config.yaml at one this account offers." +
+      " Trade proposals below still scan the basket independently of this."});
+  else if(!s.symbol.market_open)
+    alerts.push({kind:"warn", text:"No live tick for " + s.symbol.name + " — the market is closed."});
+  if(s.symbol.tick_value_source && s.symbol.tick_value_source !== "reported")
+    alerts.push({kind:"warn", text:`Contract tick value verified via <code>${s.symbol.tick_value_source}</code>` +
+      ` (${s.symbol.tick_value}). The broker's reported field disagreed and would have mis-sized positions.`});
+  renderAlerts();
+
+  $("balance").textContent = fmt(s.account.balance);
+  $("acctnote").textContent = `${s.account.login} · ${s.account.server} · 1:${s.account.leverage}`;
+  $("equity").textContent = fmt(s.account.equity);
+  const drift = s.account.equity - s.account.balance;
+  $("equitynote").innerHTML = `<span class="${cls(drift)}">${signed(drift)} ${currency}</span> unrealised`;
+  $("openpnl").innerHTML = `<span class="${cls(s.account.profit)}">${signed(s.account.profit)}</span>`;
+  $("freemargin").textContent = fmt(s.account.free_margin);
+  $("marginnote").textContent = s.account.margin > 0
+    ? `${fmt(s.account.margin)} used · level ${fmt(s.account.margin_level,0)}%` : "no margin in use";
+
+  const sig = (s.strategy.signal || "—").toUpperCase();
+  $("signal").textContent = sig;
+  $("signal").className = "sig " + (sig==="LONG"?"pos":sig==="SHORT"?"neg":"mut");
+  $("quote").textContent = s.symbol.bid ? `${fmt(s.symbol.bid,digits)} / ${fmt(s.symbol.ask,digits)}` : "—";
+  $("spread").textContent = s.symbol.spread_points!=null ? s.symbol.spread_points + " pts" : "—";
+  $("atr").textContent = s.strategy.atr ?? "—";
+  $("lastbar").textContent = s.strategy.last_bar
+    ? fmtTime(s.strategy.last_bar, true) + " " + tzLabel() : "—";
+  $("riskpct").textContent = s.strategy.risk_pct + "%" + (s.strategy.dry_run ? " (dry run)" : "");
+  if(!riskSeeded){            // seed the sizing controls from live config, once
+    const st = s.strategy;
+    $("riskPct").value = st.risk_pct;
+    if(st.min_lot != null) $("minLot").value = st.min_lot;
+    if(st.max_lot != null) $("maxLot").value = st.max_lot;
+    // A fixed_lot in the config starts the UI in fixed-lot mode on that size;
+    // otherwise stay in risk mode and leave the fixed box at its default.
+    if(st.fixed_lot > 0){
+      $("fixedLot").value = st.fixed_lot;
+      $("sizeMode").value = "fixed";
+      renderSizeMode();
+    }
+    riskSeeded = true;
+  }
+  $("magic").textContent = s.strategy.magic;
+  $("tickvalue").textContent = s.symbol.tick_value != null
+    ? `${s.symbol.tick_value} (${s.symbol.tick_value_source})` : "—";
+
+  const ours = s.positions.filter(p => p.ours).length;
+  $("poscount").textContent = `${s.positions.length} open · ${ours} from this bot`;
+  renderPositions(s.positions);
+}
+
+// Two-step, in-page confirmation. Native confirm()/alert() are suppressed in
+// embedded webviews — they return false instantly without ever showing a
+// dialog, which made the Close button silently do nothing.
+const pendingConfirm = new Set();
+
+function renderPositions(rows){
+  if(!rows.length){
+    $("positions").innerHTML = '<div class="empty">No open positions.</div>';
+    $("closeall").style.display = "none";
+    pendingConfirm.clear();
+    return;
+  }
+  $("closeall").style.display = "";
+  $("positions").innerHTML = `<table><thead><tr>
+    <th>Ticket</th><th>Symbol</th><th>Side</th><th>Lots</th><th>Open</th>
+    <th>Current</th><th>SL</th><th>TP</th><th>Swap</th><th>P&amp;L</th><th></th>
+    </tr></thead><tbody>${rows.map(p=>{
+      const armed = pendingConfirm.has(p.ticket);
+      // Each row uses ITS OWN symbol's precision, not the dashboard's.
+      const d = p.digits ?? digits;
+      return `<tr>
+      <td>${p.ticket}${p.ours?' <span class="mut">·bot</span>':''}</td>
+      <td>${p.symbol}</td>
+      <td class="${p.side==='BUY'?'pos':'neg'}">${p.side}</td>
+      <td>${fmt(p.volume,2)}</td>
+      <td>${fmt(p.open,d)}</td>
+      <td>${fmt(p.current,d)}</td>
+      <td>${p.sl?fmt(p.sl,d):'<span class="mut">none</span>'}</td>
+      <td>${p.tp?fmt(p.tp,d):'<span class="mut">none</span>'}</td>
+      <td class="${cls(p.swap)}">${signed(p.swap)}</td>
+      <td class="${cls(p.profit)}">${signed(p.profit)}</td>
+      <td><button class="${armed?'danger':''}" data-ticket="${p.ticket}"
+           onclick="onCloseClick(${p.ticket},this)">${armed?'Confirm?':'Close'}</button></td>
+    </tr>`;}).join("")}</tbody></table>`;
+}
+
+function onCloseClick(ticket, btn){
+  if(!pendingConfirm.has(ticket)){
+    pendingConfirm.add(ticket);
+    btn.textContent = "Confirm?";
+    btn.classList.add("danger");
+    // Disarm after 5s so a stray click cannot linger and fire later.
+    setTimeout(() => {
+      if(pendingConfirm.delete(ticket)){
+        const b = document.querySelector(`#positions button[data-ticket="${ticket}"]`);
+        if(b && !b.disabled){ b.textContent = "Close"; b.classList.remove("danger"); }
+      }
+    }, 8000);
+    return;
+  }
+  pendingConfirm.delete(ticket);
+  closePosition(ticket, btn);
+}
+
+// Requests can hang if the terminal stalls; never leave the button stuck.
+async function postWithTimeout(url, ms=20000, opts={}){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  try{
+    return await getJSON(url, {method:"POST", ...opts, signal:controller.signal});
+  } finally { clearTimeout(timer); }
+}
+
+let busy = false;   // pause polling so a close is not fighting the refreshes
+
+async function closePosition(ticket, btn){
+  busy = true;
+  btn.disabled = true; btn.textContent = "closing…"; btn.classList.remove("danger");
+  try{
+    const r = await postWithTimeout(`/api/positions/${ticket}/close`);
+    showNotice(r.already_closed
+      ? `Position ${ticket} was already closed.`
+      : `Closed ${ticket} at ${r.price ?? "market"}.`, "ok");
+  }catch(e){
+    showNotice(`Close failed for ${ticket}: ${e.message}`, "err");
+    btn.disabled = false; btn.textContent = "Close";
+  } finally {
+    busy = false;
+    await refreshState(); await refreshDeals();
+  }
+}
+
+async function closeAll(btn){
+  if(!pendingConfirm.has("ALL")){
+    pendingConfirm.add("ALL");
+    btn.textContent = "Confirm close all?"; btn.classList.add("danger");
+    setTimeout(() => {
+      if(pendingConfirm.delete("ALL")){
+        btn.textContent = "Close all"; btn.classList.remove("danger");
+      }
+    }, 8000);
+    return;
+  }
+  pendingConfirm.delete("ALL");
+  busy = true;
+  btn.disabled = true; btn.textContent = "closing…"; btn.classList.remove("danger");
+  try{
+    const r = await postWithTimeout("/api/positions/close-all", 60000);
+    const failed = (r.results||[]).filter(x=>!x.ok);
+    showNotice(failed.length
+      ? `Closed ${r.closed}/${r.attempted}. Failed: ` +
+        failed.map(f=>`${f.symbol} (${f.comment})`).join(", ")
+      : `Closed ${r.closed} position(s).`, failed.length ? "err" : "ok");
+  }catch(e){
+    showNotice("Close all failed: " + e.message, "err");
+  } finally {
+    busy = false;
+    btn.disabled = false; btn.textContent = "Close all";
+    await refreshState(); await refreshDeals();
+  }
+}
+
+// ---------------------------------------------------------------- proposals
+let lastScan = null;
+
+// Approve sends REAL orders by default. The mode is stated in a banner rather
+// than left to a checkbox nobody reads - "did that just trade?" is the wrong
+// question to be asking after the fact.
+function renderMode(){
+  const live = $("liveMode").checked;
+  const bar = $("modeBar");
+  bar.className = "modebar " + (live ? "live" : "sim");
+  bar.textContent = live
+    ? "LIVE — approving or Find & Run places real orders on this account."
+    : "SIMULATION — approving or Find & Run only reports what would happen. No orders sent.";
+  if(lastScan) renderProposals(lastScan);
+}
+
+// Show only the inputs that the chosen sizing mode uses. Fixed-lot mode hides
+// risk % and the lot band; risk mode hides the fixed-lot box.
+function renderSizeMode(){
+  const fixed = $("sizeMode").value === "fixed";
+  $("riskCtl").style.display   = fixed ? "none" : "";
+  $("minLotCtl").style.display = fixed ? "none" : "";
+  $("maxLotCtl").style.display = fixed ? "none" : "";
+  $("fixedLotCtl").style.display = fixed ? "" : "none";
+}
+
+// The risk/lot knobs that drive sizing on the server, per the chosen mode.
+// Sending fixed_lot: 0 explicitly clears any fixed lot when back in risk mode.
+function sizingParams(){
+  if($("sizeMode").value === "fixed"){
+    return {fixed_lot: parseFloat($("fixedLot").value)};
+  }
+  return {
+    risk_pct: parseFloat($("riskPct").value),
+    min_lot: parseFloat($("minLot").value),
+    max_lot: parseFloat($("maxLot").value),
+    fixed_lot: 0,
+  };
+}
+
+async function runScan(btn){
+  busy = true;
+  btn.disabled = true; btn.textContent = "scanning…";
+  $("proposals").innerHTML = '<div class="empty">Scanning the basket…</div>';
+  try{
+    const q = new URLSearchParams({
+      ...sizingParams(),
+      max_corr: $("maxCorr").value,
+      risk_budget: $("riskBudget").value,
+      max_currency_risk: $("currencyCap").value,
+    });
+    lastScan = await postWithTimeout(`/api/scan?${q}`, 120000);
+    renderProposals(lastScan);
+  }catch(e){
+    $("proposals").innerHTML = '<div class="empty">Scan failed.</div>';
+    showScanNotice("Scan failed: " + e.message, "err");
+  } finally {
+    busy = false;
+    btn.disabled = false; btn.textContent = "Scan";
+  }
+}
+
+// Find & Run: scan and place every surviving setup in one server call, with no
+// per-trade approval (that was the explicit design choice). The live/sim banner
+// and the "send real orders" checkbox are the only guard - honour dry_run.
+async function findAndRun(btn){
+  busy = true;
+  const scanBtn = $("scanBtn");
+  btn.disabled = true; scanBtn.disabled = true;
+  btn.textContent = "running…";
+  $("proposals").innerHTML = '<div class="empty">Scanning and placing setups…</div>';
+  try{
+    const r = await postWithTimeout("/api/autorun", 120000, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        ...sizingParams(),
+        max_corr: parseFloat($("maxCorr").value),
+        risk_budget: parseFloat($("riskBudget").value),
+        max_currency_risk: parseFloat($("currencyCap").value),
+        dry_run: !$("liveMode").checked,
+      }),
+    });
+    lastScan = r;
+    renderProposals(r);
+    const ex = r.executed || [];
+    const ok = ex.filter(e => e.ok);
+    if(!ex.length){
+      showScanNotice("Nothing to run — no setup passed the filters.", "ok");
+    } else {
+      const verb = r.dry_run ? "would place" : "placed";
+      const detail = ok.map(e =>
+        `${e.side.toUpperCase()} ${e.volume} ${e.symbol}`).join(", ");
+      const failed = ex.length - ok.length;
+      showScanNotice(
+        `${r.dry_run ? "DRY RUN — " : ""}${verb} ${ok.length}/${ex.length}: ${detail}`
+        + (failed ? ` · ${failed} failed` : ""),
+        failed ? "err" : "ok");
+    }
+  }catch(e){
+    $("proposals").innerHTML = '<div class="empty">Run failed.</div>';
+    showScanNotice("Run failed: " + e.message, "err");
+  } finally {
+    busy = false;
+    btn.disabled = false; scanBtn.disabled = false;
+    btn.textContent = "Find & Run";
+    await refreshState(); await refreshDeals();
+  }
+}
+
+function renderProposals(d){
+  const live = $("liveMode").checked;
+  const props = d.proposals || [];
+  const parts = [];
+
+  if(!props.length){
+    const any = (d.scans||[]).filter(s => s.actionable).length;
+    parts.push(`<div class="empty">${any
+      ? "Candidates found, but none passed the portfolio limits — see below."
+      : "No tradeable setups right now."}</div>`);
+  }
+
+  for(const p of props){
+    const pl = p.plan, d2 = p.digits ?? 5;
+    parts.push(`<div class="prop">
+      <div>
+        <div class="head">${p.symbol}
+          <span class="${pl.side==='buy'?'pos':'neg'}">${pl.side.toUpperCase()}</span>
+          ${fmt(pl.volume,2)} lots
+          <span class="pill ${live?'live':'sim'}">${live?'LIVE':'SIMULATED'}</span>
+        </div>
+        <div class="detail">
+          SL ${fmt(pl.stop_loss,d2)} &nbsp; TP ${fmt(pl.take_profit,d2)}
+          &nbsp;·&nbsp; risk $${fmt(pl.risk_amount)}
+          &nbsp;·&nbsp; ATR ${p.atr!=null?Number(p.atr).toPrecision(4):"—"}
+          &nbsp;·&nbsp; spread ${p.spread_points ?? "—"} pts
+        </div>
+      </div>
+      <div><button data-prop="${p.symbol}"
+        onclick="onApproveClick('${p.symbol}','${pl.side}',this)">Approve</button></div>
+    </div>`);
+  }
+
+  if((d.rejected||[]).length){
+    parts.push('<div class="rejects"><b>Filtered out</b>' +
+      d.rejected.map(r =>
+        `<div>${r.symbol} ${r.side}: ${r.reason}</div>`).join("") + '</div>');
+  }
+
+  const pf = d.portfolio;
+  if(pf){
+    parts.push(`<div class="summary">
+      naive sum $${fmt(pf.naive_risk)} (${pf.naive_pct}%) &nbsp;·&nbsp;
+      correlation-adjusted <b>$${fmt(pf.combined_risk)} (${pf.combined_pct}%)</b>
+      &nbsp;·&nbsp; diversification ${pf.diversification}x
+      ${Object.keys(pf.currency_risk||{}).length ? '<br>net currency: ' +
+        Object.entries(pf.currency_risk)
+          .sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]))
+          .map(([c,v])=>`${c} ${signed(v)}`).join(", ") : ''}
+    </div>`);
+  }
+
+  $("proposals").innerHTML = parts.join("");
+}
+
+function onApproveClick(symbol, side, btn){
+  const key = "prop:" + symbol;
+  if(!pendingConfirm.has(key)){
+    pendingConfirm.add(key);
+    // Say which action is about to happen, not a generic "Confirm?".
+    btn.textContent = $("liveMode").checked ? "Send order?" : "Simulate?";
+    btn.classList.add("danger");
+    setTimeout(() => {
+      if(pendingConfirm.delete(key) && !btn.disabled){
+        btn.textContent = "Approve"; btn.classList.remove("danger");
+      }
+    }, 8000);
+    return;
+  }
+  pendingConfirm.delete(key);
+  approve(symbol, side, btn);
+}
+
+async function approve(symbol, side, btn){
+  busy = true;
+  btn.disabled = true; btn.textContent = "sending…"; btn.classList.remove("danger");
+  try{
+    const r = await getJSON("/api/trade", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({symbol, side,
+        ...sizingParams(),
+        dry_run: !$("liveMode").checked}),
+    });
+    showScanNotice(r.dry_run
+      ? `DRY RUN — would ${r.side.toUpperCase()} ${r.volume} ${r.symbol} `
+        + `(SL ${r.stop_loss}, TP ${r.take_profit}, risk $${r.risk_amount}). No order sent.`
+      : `Filled ${r.side.toUpperCase()} ${r.volume} ${r.symbol} @ ${r.price} `
+        + `— ticket ${r.ticket}, risk $${r.risk_amount}.`, "ok");
+    btn.textContent = r.dry_run ? "Simulated" : "Placed";
+  }catch(e){
+    // 409 means the setup moved on since the scan - that is the guard working.
+    showScanNotice(`${symbol}: ${e.message}`, "err");
+    btn.disabled = false; btn.textContent = "Approve";
+  } finally {
+    busy = false;
+    await refreshState(); await refreshDeals();
+  }
+}
+
+let scanNoticeTimer = null;
+function showScanNotice(text, kind){
+  const el = $("scanNotice");
+  el.textContent = text;
+  el.className = "notice " + (kind === "err" ? "err" : "ok");
+  el.style.display = "";
+  clearTimeout(scanNoticeTimer);
+  scanNoticeTimer = setTimeout(() => { el.style.display = "none"; }, 12000);
+}
+
+let noticeTimer = null;
+function showNotice(text, kind){
+  const el = $("notice");
+  el.textContent = text;
+  el.className = "notice " + (kind === "err" ? "err" : "ok");
+  el.style.display = "";
+  clearTimeout(noticeTimer);
+  noticeTimer = setTimeout(() => { el.style.display = "none"; }, 8000);
+}
+
+async function refreshDeals(){
+  let d;
+  try{ d = await getJSON("/api/deals"); }catch{ return; }
+  $("realised").innerHTML = `<span class="${cls(d.stats.realised)}">${signed(d.stats.realised)}</span>`;
+  $("realisednote").textContent = d.stats.closed
+    ? `${d.stats.closed} bot trades · ${d.stats.win_rate}% won` : "no bot trades yet";
+  if(!d.deals.length){ $("deals").innerHTML =
+    '<div class="empty">No closed trades in the last 30 days.</div>'; return; }
+  $("deals").innerHTML = `<table><thead><tr>
+    <th>Closed (${tzLabel()})</th><th>Symbol</th><th>Lots</th><th>Price</th><th>Net P&amp;L</th><th>Source</th>
+    </tr></thead><tbody>${d.deals.map(x=>`<tr>
+      <td>${fmtTime(x.time, true)}</td>
+      <td>${x.symbol}</td><td>${fmt(x.volume,2)}</td>
+      <td>${fmt(x.price, x.digits ?? digits)}</td>
+      <td class="${cls(x.profit)}">${signed(x.profit)}</td>
+      <td class="mut">${x.ours?"bot":"manual"}</td>
+    </tr>`).join("")}</tbody></table>`;
+}
+
+async function refreshChart(){
+  let d;
+  try{ d = await getJSON("/api/candles?" + viewQuery({bars: 180})); }
+  catch(e){
+    $("chartlabel").textContent = "chart unavailable: " + e.message;
+    return;
+  }
+  const c = d.candles;
+  if(!c.length){ $("chartlabel").textContent = "no bars for this selection"; return; }
+  const cdig = d.digits ?? digits;
+  $("chartlabel").textContent =
+    `${d.symbol} ${d.timeframe} · ${c.length} bars · ${d.strategy} · times in ${tzLabel()}`;
+
+  const cv = $("chart"), dpr = window.devicePixelRatio || 1;
+  const w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = w*dpr; cv.height = h*dpr;
+  const g = cv.getContext("2d"); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,w,h);
+
+  const css = getComputedStyle(document.documentElement);
+  const C = n => css.getPropertyValue(n).trim();
+  const padL = 8, padR = 66, padT = 12, padB = 30;
+  const lo = Math.min(...c.map(x=>x.l)), hi = Math.max(...c.map(x=>x.h));
+  const span = (hi-lo) || 1;
+  const X = i => padL + i*(w-padL-padR)/c.length;
+  const Y = p => padT + (hi-p)/span*(h-padT-padB);
+  const priceDp = cdig >= 3 ? Math.min(cdig, 5) : 2;
+
+  g.strokeStyle = C("--line"); g.fillStyle = C("--muted");
+  g.font = "10px ui-monospace,monospace"; g.lineWidth = 1;
+  for(let i=0;i<=4;i++){
+    const p = hi - span*i/4, y = Y(p);
+    g.globalAlpha=.5; g.beginPath(); g.moveTo(padL,y); g.lineTo(w-padR,y); g.stroke();
+    g.globalAlpha=1; g.fillText(p.toFixed(priceDp), w-padR+6, y+3);
+  }
+
+  // Time axis. Without it a timeframe selector is guesswork - you can change
+  // M1 to H4 and not be able to tell from the chart which you are looking at.
+  const intraday = ["M1","M5","M15","M30","H1","H4"].includes(d.timeframe);
+  const ticks = Math.min(6, c.length);
+  g.textAlign = "center";
+  for(let k=0;k<ticks;k++){
+    const i = Math.round(k*(c.length-1)/(ticks-1||1));
+    const x = X(i);
+    g.globalAlpha=.35; g.strokeStyle=C("--line");
+    g.beginPath(); g.moveTo(x,padT); g.lineTo(x,h-padB); g.stroke();
+    g.globalAlpha=1; g.fillStyle=C("--muted");
+    g.fillText(fmtTime(c[i].t, !intraday), x, h-padB+13);
+    if(intraday && (k===0 || k===ticks-1))
+      g.fillText(fmtTime(c[i].t, true).split(" ").slice(0,2).join(" "), x, h-padB+23);
+  }
+  g.textAlign = "start";
+
+  const bw = Math.max(1.5, (w-padL-padR)/c.length*0.62);
+  c.forEach((x,i)=>{
+    const up = x.c >= x.o, col = up ? C("--up") : C("--down");
+    const cx = X(i)+bw/2;
+    g.strokeStyle = col; g.fillStyle = col; g.lineWidth = 1;
+    g.beginPath(); g.moveTo(cx, Y(x.h)); g.lineTo(cx, Y(x.l)); g.stroke();
+    const yo = Y(x.o), yc = Y(x.c);
+    g.fillRect(X(i), Math.min(yo,yc), bw, Math.max(1, Math.abs(yc-yo)));
+  });
+
+  // Overlays are whatever the active strategy exposes; donchian and smc have none.
+  const palette = {fast:C("--accent"), slow:C("--warn")};
+  for(const key of (d.overlays || [])){
+    g.strokeStyle = palette[key] || C("--muted"); g.lineWidth = 1.4; g.beginPath();
+    let started = false;
+    c.forEach((x,i)=>{
+      if(x[key]==null) return;
+      const px = X(i)+bw/2, py = Y(x[key]);
+      started ? g.lineTo(px,py) : (g.moveTo(px,py), started=true);
+    });
+    g.stroke();
+  }
+
+  // Mark bars where the strategy wants a position - useful when there are no
+  // moving-average overlays to look at.
+  c.forEach((x,i)=>{
+    if(x.signal !== "long" && x.signal !== "short") return;
+    g.fillStyle = x.signal === "long" ? C("--up") : C("--down");
+    g.globalAlpha = .85;
+    const px = X(i)+bw/2;
+    g.beginPath();
+    g.arc(px, x.signal === "long" ? Y(x.l) + 7 : Y(x.h) - 7, 1.9, 0, Math.PI*2);
+    g.fill();
+    g.globalAlpha = 1;
+  });
+
+  const last = c[c.length-1];
+  g.fillStyle = C("--text"); g.font = "11px ui-monospace,monospace";
+  g.fillText(last.c.toFixed(priceDp), w-padR+6, Y(last.c)+3);
+  g.strokeStyle = C("--accent"); g.globalAlpha=.6; g.setLineDash([3,3]);
+  g.beginPath(); g.moveTo(padL,Y(last.c)); g.lineTo(w-padR,Y(last.c)); g.stroke();
+  g.setLineDash([]); g.globalAlpha=1;
+}
+
+// Skip polls while a close is in flight: the terminal has a single IPC channel
+// and a refresh competing with an order send is what made closes look hung.
+function tick(){ if(!busy) refreshState(); }
+renderMode();
+loadSymbols().then(() => { refreshState(); refreshChart(); });
+refreshDeals();
+setInterval(tick, 3000);
+setInterval(() => { if(!busy) refreshDeals(); }, 15000);
+setInterval(() => { if(!busy) refreshChart(); }, 30000);
+window.addEventListener("resize", () => clearTimeout(window._rt) ||
+  (window._rt = setTimeout(refreshChart, 200)));
+</script>
+</body>
+</html>

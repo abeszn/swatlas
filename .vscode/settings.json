@@ -1,0 +1,26 @@
+{
+  // Point VS Code at the project venv so the integrated terminal auto-activates
+  // it and IntelliSense resolves MetaTrader5, pandas, fastapi.
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true,
+
+  // src/ is not installed as a package - the scripts put it on sys.path at
+  // runtime. Tell the language server the same thing or imports show as errors.
+  "python.analysis.extraPaths": ["${workspaceFolder}/src"],
+  "python.analysis.typeCheckingMode": "basic",
+
+  // The docs and commands in this repo assume PowerShell, not cmd.
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    ".venv": true
+  },
+  "files.watcherExclude": {
+    "**/.venv/**": true,
+    "**/logs/**": true,
+    "**/research/data/**": true
+  }
+}
