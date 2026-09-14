@@ -23,6 +23,11 @@
 # ---------------------------------------------------------------------------
 
 symbol: XAUUSD
+# Appended to `symbol` and to every basket symbol the scanner checks. Some
+# brokers (e.g. this Exness demo) suffix standard-account symbols, so the
+# canonical "XAUUSD" above only resolves as "XAUUSDm" on the terminal. Set to
+# "" for a broker that uses plain names.
+broker_suffix: "m"
 timeframe: H4           # M1 M5 M15 M30 H1 H4 D1
 magic: 770001           # identifies this bot's trades; leave unique per bot instance
 

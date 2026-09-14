@@ -77,6 +77,10 @@ class Config:
     execution: ExecutionConfig
     news: NewsConfig
     credentials: Credentials
+    broker_suffix: str = ""     # e.g. "m" on brokers that suffix standard-account
+                                # symbols (XAUUSD -> XAUUSDm). Already applied to
+                                # `symbol` above; scanner.py applies it to the
+                                # basket, since DEFAULT_BASKET stays broker-neutral.
 
     @property
     def bars_needed(self) -> int:
@@ -115,6 +119,15 @@ def load_config(config_path: Path | str | None = None) -> Config:
     if risk.fixed_lot > risk.max_lot:
         raise ValueError("risk.fixed_lot must not exceed risk.max_lot")
 
+    # Some brokers (e.g. Exness standard/demo accounts) suffix every symbol -
+    # XAUUSD becomes XAUUSDm. config.yaml stays broker-neutral; the suffix is
+    # appended once here rather than baked into `symbol`, so switching accounts
+    # is a one-line change instead of rewriting every symbol reference.
+    broker_suffix = str(raw.get("broker_suffix", ""))
+    symbol = str(raw["symbol"])
+    if broker_suffix and not symbol.endswith(broker_suffix):
+        symbol += broker_suffix
+
     load_dotenv(PROJECT_ROOT / ".env")
     login = os.getenv("MT5_LOGIN")
     credentials = Credentials(
@@ -125,12 +138,13 @@ def load_config(config_path: Path | str | None = None) -> Config:
     )
 
     return Config(
-        symbol=str(raw["symbol"]),
+        symbol=symbol,
         timeframe_name=tf_name,
         timeframe=TIMEFRAMES[tf_name],
         magic=int(raw["magic"]),
         strategy=strategy,
         risk=risk,
+        broker_suffix=broker_suffix,
         execution=ExecutionConfig(**raw["execution"]),
         news=NewsConfig(**raw.get("news", {})),
         credentials=credentials,

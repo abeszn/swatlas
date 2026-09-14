@@ -213,8 +213,13 @@ def open_exposures(config: Config) -> list[Exposure]:
 def run_scan(config: Config, symbols: list[str] | None = None,
              calendar: NewsCalendar | None = None,
              limits: PortfolioLimits | None = None) -> ScanResult:
-    """Scan the basket and return correlation-filtered proposals."""
-    symbols = symbols or DEFAULT_BASKET
+    """Scan the basket and return correlation-filtered proposals.
+
+    DEFAULT_BASKET holds broker-neutral names; the caller's explicit `symbols`
+    (if given) is assumed to already be broker-resolved, since a caller passing
+    its own list has presumably already decided what to ask the terminal for.
+    """
+    symbols = symbols or [s + config.broker_suffix for s in DEFAULT_BASKET]
     account = mt5.account_info()
     balance = account.balance if account else 0.0
 
